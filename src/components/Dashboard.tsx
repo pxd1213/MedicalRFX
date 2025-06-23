@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Filter, Search, TrendingUp, DollarSign, Calendar, Award, Users } from 'lucide-react';
+import { Plus, Filter, Search, TrendingUp, DollarSign, Calendar, Award, Users, Sparkles } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import ProjectDetails from './ProjectDetails';
 import BidModal from './BidModal';
@@ -8,8 +8,8 @@ import { Project } from '../types';
 import { mockConsultants, mockRegisteredBodies, mockCompanies } from '../data/mockData';
 
 interface DashboardProps {
-  userType: 'company' | 'consultant';
   projects: Project[];
+  userType: 'consultant' | 'company' | 'admin';
   onPostProject?: () => void;
 }
 
@@ -31,6 +31,50 @@ export default function Dashboard({ userType, projects, onPostProject }: Dashboa
     console.log('Bid submitted:', bidData);
     // In a real app, this would send the bid to the backend
   };
+
+  // Platform statistics
+  const platformStats = [
+    { 
+      label: 'Active Projects', 
+      value: '247', 
+      icon: Calendar, 
+      color: 'text-blue-600' 
+    },
+    { 
+      label: 'Verified Consultants', 
+      value: '1,423', 
+      icon: Users, 
+      color: 'text-green-600' 
+    },
+    { 
+      label: 'Success Rate', 
+      value: '98.4%', 
+      icon: TrendingUp, 
+      color: 'text-purple-600' 
+    }
+  ];
+
+  // Recent activity feed
+  const recentActivity = [
+    { 
+      type: 'project', 
+      title: 'New 510(k) project posted', 
+      details: '$15K budget', 
+      icon: Plus 
+    },
+    { 
+      type: 'consultant', 
+      title: 'CE marking consultant awarded project', 
+      details: 'Class II device', 
+      icon: Award 
+    },
+    { 
+      type: 'success', 
+      title: 'Class II device successfully registered', 
+      details: 'FDA approval', 
+      icon: Sparkles 
+    }
+  ];
 
   const stats = userType === 'company' 
     ? [
@@ -114,77 +158,21 @@ export default function Dashboard({ userType, projects, onPostProject }: Dashboa
         </nav>
       </div>
 
-      {/* Tab Content */}
-      {activeTab === 'projects' ? (
-        <>
-          {/* Filters and Search */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <input
-                    type="text"
-                    placeholder="Search projects..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center">
-                  <Filter className="w-5 h-5 text-gray-400 mr-2" />
-                  <select
-                    value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value)}
-                    className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  >
-                    <option value="all">All Status</option>
-                    <option value="open">Open</option>
-                    <option value="in-review">In Review</option>
-                    <option value="awarded">Awarded</option>
-                    <option value="completed">Completed</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredProjects.map((project) => (
+          <ProjectCard
+            project={project}
+            onViewDetails={() => setSelectedProject(project)}
+            onPlaceBid={() => setBidProject(project)}
+            showBidButton={userType === 'consultant'}
+          />
+        ))}
+      </div>
 
-          {/* Projects Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredProjects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onViewDetails={setSelectedProject}
-                onPlaceBid={userType === 'consultant' ? setBidProject : undefined}
-                showBidButton={userType === 'consultant'}
-              />
-            ))}
-          </div>
-
-          {filteredProjects.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No projects found matching your criteria.</p>
-            </div>
-          )}
-        </>
-      ) : (
-        <NetworkSearch
-          consultants={mockConsultants}
-          registeredBodies={mockRegisteredBodies}
-          companies={mockCompanies}
-        />
-      )}
-
-      {/* Modals */}
       {selectedProject && (
         <ProjectDetails
           project={selectedProject}
           onClose={() => setSelectedProject(null)}
-          onPlaceBid={userType === 'consultant' ? setBidProject : undefined}
-          showBidButton={userType === 'consultant'}
         />
       )}
 

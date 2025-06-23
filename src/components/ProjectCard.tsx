@@ -4,8 +4,8 @@ import { Project } from '../types';
 
 interface ProjectCardProps {
   project: Project;
-  onViewDetails: (project: Project) => void;
-  onPlaceBid?: (project: Project) => void;
+  onViewDetails: () => void;
+  onPlaceBid: () => void;
   showBidButton?: boolean;
 }
 
@@ -91,14 +91,14 @@ export default function ProjectCard({
       {/* Actions */}
       <div className="flex gap-3 pt-4 border-t border-gray-100">
         <button
-          onClick={() => onViewDetails(project)}
+          onClick={onViewDetails}
           className="flex-1 text-gray-700 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors font-medium"
         >
           View Details
         </button>
         {showBidButton && project.status === 'open' && onPlaceBid && (
           <button
-            onClick={() => onPlaceBid(project)}
+            onClick={onPlaceBid}
             className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
             Place Bid
