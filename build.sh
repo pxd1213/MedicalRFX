@@ -3,8 +3,11 @@
 # Install dependencies
 npm ci
 
-# Ensure all dependencies are properly linked
-npm install
+# Ensure Vite is properly installed
+npm install vite@latest
 
-# Build the project using npx
-npx vite build
+# Link dependencies
+npm link vite
+
+# Build the project using the local Vite
+node_modules/.bin/vite build
