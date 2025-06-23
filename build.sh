@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Install dependencies
-npm ci
+npm install
 
 # Install exact version of Vite
 npm install vite@4.5.0
