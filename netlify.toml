@@ -3,6 +3,7 @@
   command = "npm run clean && npm install && npm run build"
   publish = "build"
   node = "16.20.2"
+  environment = "production"
 
 [dev]
   command = "npm start"
