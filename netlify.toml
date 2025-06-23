@@ -3,12 +3,11 @@
   command = "npm run clean && npm install && npm run build"
   publish = "build"
   node = "16.20.2"
-  environment = "production"
+
+[build.environment]
+  NODE_ENV = "production"
+  CI = "false"
 
 [dev]
   command = "npm start"
   port = 3000
-
-[context.production.environment]
-  NODE_ENV = "production"
-  CI = "false"
