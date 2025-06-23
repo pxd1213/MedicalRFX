@@ -59,32 +59,5 @@ function App() {
     </Router>
   );
 }
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors shadow-lg"
-          >
-            Company View
-          </button>
-          <button
-            onClick={() => {
-              setCurrentUser(mockUsers[1]);
-              setCurrentView('consultant-dashboard');
-            }}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition-colors shadow-lg"
-          >
-            Consultant View
-          </button>
-          <button
-            onClick={() => {
-              setCurrentUser(null);
-              setCurrentView('landing');
-            }}
-            className="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-700 transition-colors shadow-lg"
-          >
-            Landing Page
-          </button>
-        </div>
-      )}
-    </div>
-  );
-}
 
 export default App;
