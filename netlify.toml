@@ -1,13 +1,12 @@
 [build]
   base = "/"
-  command = "chmod +x build.sh && ./build.sh"
-  publish = "dist"
+  command = "npm install && npm run build"
+  publish = "build"
   node = "18"
 
 [dev]
-  command = "npm run dev"
-  port = 5173
+  command = "npm start"
+  port = 3000
 
 [context.production.environment]
   NODE_ENV = "production"
-  VITE_ENV = "production"

@@ -1,35 +1,17 @@
 import React, { useState } from 'react';
-import Header from './components/Header';
-import Hero from './components/Hero';
-import Dashboard from './components/Dashboard';
-import PostProjectModal from './components/PostProjectModal';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { mockProjects, mockUsers } from './data/mockData';
-import { Project } from './types';
 
 function App() {
-  const [currentView, setCurrentView] = useState<'landing' | 'company-dashboard' | 'consultant-dashboard'>('landing');
-  const [showPostProject, setShowPostProject] = useState(false);
-  const [projects, setProjects] = useState<Project[]>(mockProjects);
+  const [projects, setProjects] = useState(mockProjects);
   const [currentUser, setCurrentUser] = useState(null);
 
   const handleGetStarted = () => {
-    // For demo purposes, we'll simulate logging in as a company
     setCurrentUser(mockUsers[0]);
-    setCurrentView('company-dashboard');
-  };
-
-  const handleLogin = () => {
-    // For demo purposes, we'll simulate logging in as a consultant
-    setCurrentUser(mockUsers[1]);
-    setCurrentView('consultant-dashboard');
-  };
-
-  const handleRegister = () => {
-    handleGetStarted();
   };
 
   const handlePostProject = (projectData: any) => {
-    const newProject: Project = {
+    const newProject = {
       ...projectData,
       id: String(projects.length + 1),
       postedBy: currentUser?.company || 'Anonymous Company',
@@ -39,15 +21,40 @@ function App() {
     setProjects([newProject, ...projects]);
   };
 
-  const renderCurrentView = () => {
-    switch (currentView) {
-      case 'company-dashboard':
-        return (
-          <Dashboard
-            userType="company"
-            projects={projects.filter(p => p.postedBy === currentUser?.company)}
-            onPostProject={() => setShowPostProject(true)}
-          />
+  return (
+    <Router>
+      <div className="App">
+        <nav>
+          <Link to="/">Home</Link>
+          <Link to="/dashboard">Dashboard</Link>
+        </nav>
+
+        <Routes>
+          <Route path="/" element={
+            <div>
+              <h1>Medical Device Consulting RFX Platform</h1>
+              <button onClick={handleGetStarted}>Get Started</button>
+            </div>
+          } />
+          
+          <Route path="/dashboard" element={
+            <div>
+              <h2>Dashboard</h2>
+              <div>
+                {projects.map((project) => (
+                  <div key={project.id}>
+                    <h3>{project.title}</h3>
+                    <p>{project.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          } />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
         );
       case 'consultant-dashboard':
         return (

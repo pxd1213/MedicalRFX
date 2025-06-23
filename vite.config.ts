@@ -2,8 +2,13 @@ const { defineConfig } = require('vite');
 const react = require('@vitejs/plugin-react');
 
 module.exports = defineConfig({
-  plugins: [react()],
+  root: './src',
   build: {
-    outDir: 'dist'
-  }
+    outDir: '../dist',
+    emptyOutDir: true,
+    rollupOptions: {
+      input: './main.tsx'
+    }
+  },
+  plugins: [react()]
 });

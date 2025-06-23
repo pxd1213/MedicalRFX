@@ -3,5 +3,5 @@
 # Install dependencies with --legacy-peer-deps to avoid version conflicts
 npm install --legacy-peer-deps
 
-# Build using the local Vite binary
-node node_modules/vite/dist/node/cli.js build
+# Build using npx to ensure correct version
+npx vite@4.5.0 build
