@@ -25,17 +25,6 @@ function App() {
     setCurrentUser(mockUsers[0]);
   };
 
-  const handlePostProject = (projectData: Omit<Project, 'id' | 'bidCount' | 'status'>) => {
-    const newProject: Project = {
-      ...projectData,
-      id: String(projects.length + 1),
-      postedBy: currentUser?.company || 'Anonymous Company',
-      bidCount: 0,
-      status: 'open'
-    };
-    setProjects([newProject, ...projects]);
-  };
-
   return (
     <Router>
       <div className="App">
@@ -70,13 +59,6 @@ function App() {
     </Router>
   );
 }
-      {currentView !== 'landing' && (
-        <div className="fixed bottom-4 right-4 flex flex-col gap-2">
-          <button
-            onClick={() => {
-              setCurrentUser(mockUsers[0]);
-              setCurrentView('company-dashboard');
-            }}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors shadow-lg"
           >
             Company View
