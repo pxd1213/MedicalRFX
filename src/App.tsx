@@ -1,17 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { mockProjects, mockUsers } from './data/mockData';
 
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  postedBy: string;
+  bidCount: number;
+  status: string;
+}
+
+interface User {
+  id: string;
+  name: string;
+  company: string;
+}
+
 function App() {
-  const [projects, setProjects] = useState(mockProjects);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [projects, setProjects] = React.useState<Project[]>(mockProjects);
+  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
 
   const handleGetStarted = () => {
     setCurrentUser(mockUsers[0]);
   };
 
-  const handlePostProject = (projectData: any) => {
-    const newProject = {
+  const handlePostProject = (projectData: Omit<Project, 'id' | 'bidCount' | 'status'>) => {
+    const newProject: Project = {
       ...projectData,
       id: String(projects.length + 1),
       postedBy: currentUser?.company || 'Anonymous Company',
@@ -55,37 +70,6 @@ function App() {
     </Router>
   );
 }
-        );
-      case 'consultant-dashboard':
-        return (
-          <Dashboard
-            userType="consultant"
-            projects={projects}
-          />
-        );
-      default:
-        return <Hero onGetStarted={handleGetStarted} />;
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Header 
-        currentUser={currentUser}
-        onLoginClick={handleLogin}
-        onRegisterClick={handleRegister}
-      />
-      
-      {renderCurrentView()}
-
-      {showPostProject && (
-        <PostProjectModal
-          onClose={() => setShowPostProject(false)}
-          onSubmitProject={handlePostProject}
-        />
-      )}
-
-      {/* Quick Navigation for Demo */}
       {currentView !== 'landing' && (
         <div className="fixed bottom-4 right-4 flex flex-col gap-2">
           <button
