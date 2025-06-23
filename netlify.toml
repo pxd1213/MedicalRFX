@@ -1,6 +1,6 @@
 [build]
   base = "/"
-  command = "npm ci && npm install && npm run build"
+  command = "npm ci && npm install && node ./node_modules/vite/bin/vite.js build"
   publish = "dist"
 
 [dev]
