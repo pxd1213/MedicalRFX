@@ -10,19 +10,13 @@ export default defineConfig({
       '@data': './src/data'
     }
   },
-  publicDir: 'public',
   base: '/',
   build: {
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: './index.html'
-      },
-      output: {
-        assetFileNames: 'assets/[name]-[hash][extname]',
-        entryFileNames: 'assets/[name]-[hash].js',
-        chunkFileNames: 'assets/[name]-[hash].js'
+        main: './src/index.html'
       }
     }
   }
