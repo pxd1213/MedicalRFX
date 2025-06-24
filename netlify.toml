@@ -8,12 +8,6 @@
   NODE_ENV = "production"
   CI = "false"
 
-[build.environment.production]
-  NODE_ENV = "production"
-
-[build.environment.development]
-  NODE_ENV = "development"
-
 [dev]
-  command = "npm start"
+  command = "npm run dev"
   port = 3000
