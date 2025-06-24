@@ -13,6 +13,12 @@ export default defineConfig({
   base: '/',
   build: {
     outDir: 'build',
-    sourcemap: true
+    sourcemap: false,
+    rollupOptions: {
+      treeshake: true,
+      output: {
+        manualChunks: undefined
+      }
+    }
   }
 });

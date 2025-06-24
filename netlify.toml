@@ -1,8 +1,8 @@
 [build]
   base = "/"
-  command = "npm install && npm run build -- --max-old-space-size=4096"
+  command = "yarn install && yarn build -- --max-old-space-size=4096"
   publish = "build"
-  node = "16.20.2"
+  node = "16.18.0"
 
 [build.environment]
   NODE_ENV = "production"
