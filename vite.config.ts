@@ -10,7 +10,7 @@ export default defineConfig({
       '@data': './src/data'
     }
   },
-  base: '/',
+  base: './',
   build: {
     outDir: 'dist',
     emptyOutDir: true,
