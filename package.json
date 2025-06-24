@@ -19,9 +19,9 @@
     "vite": "^5.0.9"
   },
   "scripts": {
-    "dev": "yarn dev",
-    "build": "yarn build",
-    "preview": "yarn preview",
+    "dev": "npm run dev",
+    "build": "npm run build",
+    "preview": "npm run preview",
     "clean": "rimraf build node_modules/.cache"
   },
   "eslintConfig": {

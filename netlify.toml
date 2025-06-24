@@ -1,6 +1,6 @@
 [build]
   base = "/"
-  command = "yarn install && yarn build"
+  command = "npm install && node --max-old-space-size=4096 node_modules/vite/bin/vite.js build"
   publish = "build"
   node = "16.20.2"
 
