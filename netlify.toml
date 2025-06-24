@@ -1,6 +1,6 @@
 [build]
   base = "/"
-  command = "npm install --legacy-peer-deps && npx vite build -- --max-old-space-size=4096"
+  command = "npm install && npm run build"
   publish = "build"
   node = "16.18.0"
 
