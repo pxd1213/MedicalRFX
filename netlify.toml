@@ -1,12 +1,18 @@
 [build]
   base = "/"
-  command = "rm -rf node_modules build && npm install && npm run build"
-  publish = "build"
-  node = "14.17.0"
+  command = "npm install && npm run build"
+  publish = "dist"
+  node = "18.17.0"
 
 [build.environment]
   NODE_ENV = "production"
   CI = "false"
+
+[build.environment.production]
+  NODE_ENV = "production"
+
+[build.environment.development]
+  NODE_ENV = "development"
 
 [dev]
   command = "npm start"

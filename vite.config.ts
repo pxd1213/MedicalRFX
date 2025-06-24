@@ -9,5 +9,14 @@ export default defineConfig({
       '@components': '/src/components',
       '@data': '/src/data'
     }
+  },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: './index.html'
+      }
+    }
   }
 });

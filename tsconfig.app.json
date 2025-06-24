@@ -1,25 +1,26 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "composite": true,
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "outDir": "./dist",
+    "declaration": true,
+    "declarationMap": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
-    },
-    "types": ["vite/client", "react", "react-dom"],
-    "noUnusedLocals": true,
-    "noUnusedParameters": true
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@data/*": ["src/data/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
