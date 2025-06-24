@@ -1,6 +1,6 @@
 [build]
   base = "/"
-  command = "yarn install && yarn build -- --max-old-space-size=4096"
+  command = "yarn install && yarn build"
   publish = "build"
   node = "16.18.0"
 
