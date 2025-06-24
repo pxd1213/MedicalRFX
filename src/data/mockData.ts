@@ -1,9 +1,11 @@
 import { Project, User, Consultant, RegisteredBody, Company } from '../types';
 
-export const mockConsultants: Consultant[] = [
+export const mockConsultantsData: Consultant[] = [
   {
     id: 'c1',
     name: 'Dr. Sarah Johnson',
+    email: 'sarah.johnson@example.com',
+    role: 'consultant',
     specializations: ['Regulatory Affairs'],
     location: 'Boston, MA',
     experience: 12,
@@ -16,6 +18,8 @@ export const mockConsultants: Consultant[] = [
   {
     id: 'c2',
     name: 'Michael Chen',
+    email: 'michael.chen@example.com',
+    role: 'consultant',
     specializations: ['Clinical Trials'],
     location: 'San Francisco, CA',
     experience: 8,
@@ -27,7 +31,7 @@ export const mockConsultants: Consultant[] = [
   }
 ];
 
-export const mockRegisteredBodies: RegisteredBody[] = [
+export const mockRegisteredBodiesData: RegisteredBody[] = [
   {
     id: 'rb1',
     name: 'MedCert Solutions',
@@ -52,24 +56,22 @@ export const mockRegisteredBodies: RegisteredBody[] = [
   }
 ];
 
-export const mockCompanies: Company[] = [
+export const mockCompaniesData: Company[] = [
   {
     id: 'co1',
     name: 'MedTech Innovations',
+    size: '50-100 employees',
     location: 'Silicon Valley, CA',
-    experience: 5,
-    rating: 4.5,
-    specializations: ['Orthopedic Devices', 'Software'],
-    projects: 25
+    focus: ['Medical Devices', 'Software Development'],
+    website: 'https://www.medtechinnovations.com'
   },
   {
     id: 'co2',
     name: 'BioPharma Corp',
+    size: '200-500 employees',
     location: 'Boston, MA',
-    experience: 10,
-    rating: 4.8,
-    specializations: ['Drug Delivery', 'Biologics'],
-    projects: 40
+    focus: ['Drug Development', 'Biologics'],
+    website: 'https://www.biopharmacorp.com'
   }
 ];
 

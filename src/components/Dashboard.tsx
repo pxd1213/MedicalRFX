@@ -4,7 +4,7 @@ import { Plus, Search } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import NetworkSearch from './NetworkSearch';
 import { Project, Consultant, RegisteredBody, Company } from '../types';
-import { mockProjects, mockConsultants, mockRegisteredBodies, mockCompanies } from '../data/mockData';
+import { mockProjects, mockConsultantsData, mockRegisteredBodiesData, mockCompaniesData } from '../data/mockData';
 
 // Add missing type declarations
 // Remove custom ChangeEvent interfaces as they are not needed with proper React imports
@@ -122,9 +122,9 @@ export default function Dashboard({ userType, onPostProject }: DashboardProps) {
 
       {activeTab === 'network' && (
         <NetworkSearch
-          consultants={mockConsultants}
-          registeredBodies={mockRegisteredBodies}
-          companies={mockCompanies}
+          consultants={mockConsultantsData}
+          registeredBodies={mockRegisteredBodiesData}
+          companies={mockCompaniesData}
         />
       )}
     </div>
