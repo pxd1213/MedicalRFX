@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import { Plus, Filter, Search, TrendingUp, DollarSign, Calendar, Award, Users, Sparkles } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import ProjectDetails from './ProjectDetails';
@@ -8,26 +9,30 @@ import { Project } from '../types';
 import { mockConsultants, mockRegisteredBodies, mockCompanies } from '../data/mockData';
 
 interface DashboardProps {
-  projects: Project[];
   userType: 'consultant' | 'company' | 'admin';
   onPostProject?: () => void;
 }
 
-export default function Dashboard({ userType, projects, onPostProject }: DashboardProps) {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [bidProject, setBidProject] = useState<Project | null>(null);
+export default function Dashboard({ userType, onPostProject }: DashboardProps) {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [activeTab, setActiveTab] = useState<'projects' | 'network'>('projects');
 
-  const filteredProjects = projects.filter(project => {
+  const filteredProjects = mockProjects.filter(project => {
     const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          project.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === 'all' || project.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
 
-  const handleSubmitBid = (bidData: any) => {
+  const handleProjectClick = (project: Project) => {
+    navigate(`/project/${project.id}`);
+  };
+
+  const handleBidClick = (project: Project) => {
+    navigate(`/project/${project.id}/bid`);
+  };
     console.log('Bid submitted:', bidData);
     // In a real app, this would send the bid to the backend
   };
