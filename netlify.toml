@@ -1,6 +1,6 @@
 [build]
   base = "/"
-  command = "yarn install && yarn run build"
+  command = "npm install --legacy-peer-deps && npm run build -- --max-old-space-size=4096"
   publish = "build"
   node = "16.18.0"
 

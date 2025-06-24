@@ -22,7 +22,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "clean": "rimraf build node_modules/.cache"
+    "clean": "rimraf build node_modules/.cache",
+    "type": "module"
   },
   "eslintConfig": {
     "extends": [
