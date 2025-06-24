@@ -5,9 +5,9 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': '/src',
-      '@components': '/src/components',
-      '@data': '/src/data'
+      '@': './src',
+      '@components': './src/components',
+      '@data': './src/data'
     }
   },
   publicDir: 'public',
@@ -18,6 +18,11 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: './index.html'
+      },
+      output: {
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js'
       }
     }
   }
