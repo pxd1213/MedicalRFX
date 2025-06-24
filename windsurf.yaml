@@ -1,0 +1,75 @@
+project:
+  name: Medical RFX
+  type: web
+  framework: react
+  build:
+    command: npm run build
+    output: dist
+  deploy:
+    provider: netlify
+    settings:
+      base: /project
+      build:
+        command: npm run build
+        publish: /project/dist
+      functions: /project/functions
+      redirects:
+        - from: /api/*
+          to: /project/functions/[path].js
+          status: 200
+  optimization:
+    preserve: true
+    ignore:
+      - src/**
+      - public/**
+      - types/**
+      - package.json
+      - tsconfig.json
+      - vite.config.ts
+      - README.md
+  dependencies:
+    install: npm install
+    devDependencies:
+      - @vitejs/plugin-react
+      - vite
+      - typescript
+      - @types/react
+      - @types/react-dom
+      - @types/node
+    scripts:
+      dev: vite
+      build: tsc -b && vite build
+      preview: vite preview
+  environment:
+    variables:
+      NODE_ENV: production
+      VITE_API_URL: ${VITE_API_URL}
+  validation:
+    strict: true
+    rules:
+      - no-unused-vars
+      - no-console
+      - react-hooks/rules-of-hooks
+      - react-hooks/exhaustive-deps
+  deployment:
+    netlify:
+      site:
+        name: medical-rfx
+        build:
+          command: npm run build
+          publish: /project/dist
+        functions:
+          directory: /project/functions
+        redirects:
+          - from: /api/*
+            to: /project/functions/[path].js
+            status: 200
+        headers:
+          - for: "/*"
+            headers:
+              - key: "Cache-Control"
+                value: "public, max-age=0, must-revalidate"
+        build:
+          environment:
+            NODE_ENV: production
+            VITE_API_URL: ${VITE_API_URL}

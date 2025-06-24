@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { Search, Filter, Users, Building, Award, MapPin, Star } from 'lucide-react';
 import ConsultantCard from './ConsultantCard';
 import RegisteredBodyCard from './RegisteredBodyCard';
@@ -11,7 +11,11 @@ interface NetworkSearchProps {
   companies: Company[];
 }
 
-export default function NetworkSearch({ consultants, registeredBodies, companies }: NetworkSearchProps) {
+export default function NetworkSearch({
+  consultants,
+  registeredBodies,
+  companies,
+}: NetworkSearchProps) {
   const [activeTab, setActiveTab] = useState<'consultants' | 'bodies' | 'companies'>('consultants');
   const [searchTerm, setSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
@@ -19,86 +23,82 @@ export default function NetworkSearch({ consultants, registeredBodies, companies
   const [availabilityFilter, setAvailabilityFilter] = useState('all');
   const [ratingFilter, setRatingFilter] = useState('all');
 
-  const handleViewProfile = (item: any) => {
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleLocationChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setLocationFilter(e.target.value);
+  };
+
+  const handleSpecializationChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSpecializationFilter(e.target.value);
+  };
+
+  const handleAvailabilityChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setAvailabilityFilter(e.target.value);
+  };
+
+  const handleRatingChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setRatingFilter(e.target.value);
+  };
+
+  const handleViewProfile = (item: Consultant | RegisteredBody | Company) => {
     console.log('View profile:', item);
-    // In a real app, this would open a detailed profile modal or navigate to profile page
   };
 
-  const handleContact = (item: any) => {
+  const handleContact = (item: Consultant | RegisteredBody | Company) => {
     console.log('Contact:', item);
-    // In a real app, this would open a contact modal or messaging interface
   };
 
-  const filterConsultants = () => {
-    return consultants.filter(consultant => {
-      const matchesSearch = consultant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           consultant.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           consultant.specializations.some(spec => spec.toLowerCase().includes(searchTerm.toLowerCase()));
-      
-      const matchesLocation = !locationFilter || consultant.location.toLowerCase().includes(locationFilter.toLowerCase());
-      
-      const matchesSpecialization = !specializationFilter || 
-                                   consultant.specializations.some(spec => spec.toLowerCase().includes(specializationFilter.toLowerCase()));
-      
-      const matchesAvailability = availabilityFilter === 'all' || consultant.availability === availabilityFilter;
-      
-      const matchesRating = ratingFilter === 'all' || 
-                           (ratingFilter === '4+' && consultant.rating >= 4) ||
-                           (ratingFilter === '4.5+' && consultant.rating >= 4.5);
-
-      return matchesSearch && matchesLocation && matchesSpecialization && matchesAvailability && matchesRating;
-    });
-  };
-
-  const filterRegisteredBodies = () => {
-    return registeredBodies.filter(body => {
-      const matchesSearch = body.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           body.specializations.some(spec => spec.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                           body.accreditations.some(acc => acc.toLowerCase().includes(searchTerm.toLowerCase()));
-      
-      const matchesLocation = !locationFilter || body.location.toLowerCase().includes(locationFilter.toLowerCase()) ||
-                             body.country.toLowerCase().includes(locationFilter.toLowerCase());
-      
-      const matchesSpecialization = !specializationFilter || 
-                                   body.specializations.some(spec => spec.toLowerCase().includes(specializationFilter.toLowerCase()));
-      
-      const matchesRating = ratingFilter === 'all' || 
-                           (ratingFilter === '4+' && body.rating >= 4) ||
-                           (ratingFilter === '4.5+' && body.rating >= 4.5);
-
-      return matchesSearch && matchesLocation && matchesSpecialization && matchesRating;
-    });
-  };
-
-  const filterCompanies = () => {
-    return companies.filter(company => {
-      const matchesSearch = company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           company.specializations.some(spec => spec.toLowerCase().includes(searchTerm.toLowerCase()));
-      
-      const matchesLocation = !locationFilter || company.location.toLowerCase().includes(locationFilter.toLowerCase()) ||
-                             company.country.toLowerCase().includes(locationFilter.toLowerCase());
-      
-      const matchesSpecialization = !specializationFilter || 
-                                   company.specializations.some(spec => spec.toLowerCase().includes(specializationFilter.toLowerCase()));
-      
-      const matchesRating = ratingFilter === 'all' || 
-                           (ratingFilter === '4+' && company.rating >= 4) ||
-                           (ratingFilter === '4.5+' && company.rating >= 4.5);
-
-      return matchesSearch && matchesLocation && matchesSpecialization && matchesRating;
-    });
-  };
-
-  const getFilteredResults = () => {
+  const filteredResults = (() => {
     switch (activeTab) {
-      case 'consultants': return filterConsultants();
-      case 'bodies': return filterRegisteredBodies();
-      case 'companies': return filterCompanies();
-      default: return [];
-    }
-  };
+      case 'consultants':
+        return consultants.filter((consultant: Consultant) => {
+          const matchesSearch = consultant.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                               (consultant.specializations?.some((spec: string) => spec.toLowerCase().includes(searchTerm.toLowerCase())) ?? false);
+          
+          const matchesLocation = !locationFilter || (consultant.location?.toLowerCase().includes(locationFilter.toLowerCase()) ?? false);
+          
+          const matchesSpecialization = !specializationFilter || (consultant.specializations?.includes(specializationFilter) ?? false);
+          
+          const matchesAvailability = availabilityFilter === 'all' || 
+                                    (availabilityFilter === 'available' && consultant.availability === 'available') ||
+                                    (availabilityFilter === 'busy' && consultant.availability === 'busy') ||
+                                    (availabilityFilter === 'unavailable' && consultant.availability === 'unavailable');
+          
+          const matchesRating = ratingFilter === 'all' || 
+                              (ratingFilter === '4+' && consultant.rating >= 4) ||
+                              (ratingFilter === '4.5+' && consultant.rating >= 4.5);
 
-  const filteredResults = getFilteredResults();
+          return matchesSearch && matchesLocation && matchesSpecialization && matchesAvailability && matchesRating;
+        });
+
+      case 'bodies':
+        return registeredBodies.filter((body: RegisteredBody) => {
+          const matchesSearch = body.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                               (body.scope?.some((scopeItem: string) => scopeItem.toLowerCase().includes(searchTerm.toLowerCase())) ?? false);
+          
+          const matchesLocation = !locationFilter || (body.location?.toLowerCase().includes(locationFilter.toLowerCase()) ?? false);
+          
+          const matchesSpecialization = !specializationFilter || (body.scope?.includes(specializationFilter) ?? false);
+          
+          return matchesSearch && matchesLocation && matchesSpecialization;
+        });
+
+      case 'companies':
+        return companies.filter((company: Company) => {
+          const matchesSearch = company.name?.toLowerCase().includes(searchTerm.toLowerCase());
+          
+          const matchesLocation = !locationFilter || (company.location?.toLowerCase().includes(locationFilter.toLowerCase()) ?? false);
+          
+          return matchesSearch && matchesLocation;
+        });
+
+      default:
+        return [];
+    }
+  })();
 
   const tabs = [
     { id: 'consultants', label: 'Consultants', icon: Users, count: consultants.length },
@@ -122,7 +122,7 @@ export default function NetworkSearch({ consultants, registeredBodies, companies
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'consultants' | 'bodies' | 'companies')}
               className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center ${
                 activeTab === tab.id
                   ? 'border-blue-500 text-blue-600'
@@ -150,7 +150,7 @@ export default function NetworkSearch({ consultants, registeredBodies, companies
                 type="text"
                 placeholder={`Search ${activeTab}...`}
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -164,7 +164,7 @@ export default function NetworkSearch({ consultants, registeredBodies, companies
                 type="text"
                 placeholder="Location"
                 value={locationFilter}
-                onChange={(e) => setLocationFilter(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setLocationFilter(e.target.value)}
                 className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -176,7 +176,7 @@ export default function NetworkSearch({ consultants, registeredBodies, companies
               type="text"
               placeholder="Specialization"
               value={specializationFilter}
-              onChange={(e) => setSpecializationFilter(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setSpecializationFilter(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -186,7 +186,7 @@ export default function NetworkSearch({ consultants, registeredBodies, companies
             {activeTab === 'consultants' && (
               <select
                 value={availabilityFilter}
-                onChange={(e) => setAvailabilityFilter(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => setAvailabilityFilter(e.target.value)}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
                 <option value="all">All Availability</option>
@@ -200,7 +200,7 @@ export default function NetworkSearch({ consultants, registeredBodies, companies
               <Star className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <select
                 value={ratingFilter}
-                onChange={(e) => setRatingFilter(e.target.value)}
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => setRatingFilter(e.target.value)}
                 className="pl-9 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm appearance-none bg-white"
               >
                 <option value="all">All Ratings</option>
@@ -230,38 +230,32 @@ export default function NetworkSearch({ consultants, registeredBodies, companies
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {activeTab === 'consultants' && 
-            (filteredResults as Consultant[]).map((consultant) => (
-              <ConsultantCard
-                key={consultant.id}
-                consultant={consultant}
-                onViewProfile={handleViewProfile}
-                onContact={handleContact}
-              />
-            ))
-          }
-          
-          {activeTab === 'bodies' && 
-            (filteredResults as RegisteredBody[]).map((body) => (
-              <RegisteredBodyCard
-                key={body.id}
-                body={body}
-                onViewDetails={handleViewProfile}
-                onContact={handleContact}
-              />
-            ))
-          }
-          
-          {activeTab === 'companies' && 
-            (filteredResults as Company[]).map((company) => (
-              <CompanyCard
-                key={company.id}
-                company={company}
-                onViewProfile={handleViewProfile}
-                onContact={handleContact}
-              />
-            ))
-          }
+          {activeTab === 'consultants' 
+            ? filteredResults.map((consultant: Consultant) => (
+                <ConsultantCard
+                  key={consultant.id}
+                  consultant={consultant}
+                  onViewProfile={() => handleViewProfile(consultant)}
+                  onContact={() => handleContact(consultant)}
+                />
+              ))
+            : activeTab === 'bodies'
+            ? filteredResults.map((body: RegisteredBody) => (
+                <RegisteredBodyCard
+                  key={body.id}
+                  body={body}
+                  onViewDetails={() => handleViewProfile(body)}
+                  onContact={() => handleContact(body)}
+                />
+              ))
+            : filteredResults.map((company: Company) => (
+                <CompanyCard
+                  key={company.id}
+                  company={company}
+                  onViewProfile={() => handleViewProfile(company)}
+                  onContact={() => handleContact(company)}
+                />
+              ))}
         </div>
 
         {filteredResults.length === 0 && (

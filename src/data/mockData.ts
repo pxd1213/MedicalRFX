@@ -1,5 +1,78 @@
 import { Project, User, Consultant, RegisteredBody, Company } from '../types';
 
+export const mockConsultants: Consultant[] = [
+  {
+    id: 'c1',
+    name: 'Dr. Sarah Johnson',
+    specializations: ['Regulatory Affairs'],
+    location: 'Boston, MA',
+    experience: 12,
+    rating: 4.8,
+    availability: 'Available',
+    certifications: ['RAC', 'CQA'],
+    areasOfExpertise: ['FDA', 'CE Mark', '510(k)', 'PMA'],
+    projectsCompleted: 35
+  },
+  {
+    id: 'c2',
+    name: 'Michael Chen',
+    specializations: ['Clinical Trials'],
+    location: 'San Francisco, CA',
+    experience: 8,
+    rating: 4.5,
+    availability: 'Available',
+    certifications: ['RAC'],
+    areasOfExpertise: ['Clinical Design', 'Data Analysis', 'Regulatory Strategy'],
+    projectsCompleted: 22
+  }
+];
+
+export const mockRegisteredBodies: RegisteredBody[] = [
+  {
+    id: 'rb1',
+    name: 'MedCert Solutions',
+    location: 'New York, NY',
+    accreditation: 'ANAB',
+    scope: ['Medical Devices', 'In Vitro Diagnostics'],
+    experience: 15,
+    rating: 4.7,
+    services: ['Notified Body', 'CE Mark', 'Quality Management'],
+    clientsServed: 120
+  },
+  {
+    id: 'rb2',
+    name: 'GlobalMed Certifications',
+    location: 'London, UK',
+    accreditation: 'UKAS',
+    scope: ['Medical Devices', 'Active Implants'],
+    experience: 10,
+    rating: 4.6,
+    services: ['Notified Body', 'CE Mark', 'Technical File Review'],
+    clientsServed: 85
+  }
+];
+
+export const mockCompanies: Company[] = [
+  {
+    id: 'co1',
+    name: 'MedTech Innovations',
+    location: 'Silicon Valley, CA',
+    experience: 5,
+    rating: 4.5,
+    specializations: ['Orthopedic Devices', 'Software'],
+    projects: 25
+  },
+  {
+    id: 'co2',
+    name: 'BioPharma Corp',
+    location: 'Boston, MA',
+    experience: 10,
+    rating: 4.8,
+    specializations: ['Drug Delivery', 'Biologics'],
+    projects: 40
+  }
+];
+
 export const mockProjects: Project[] = [
   {
     id: '1',

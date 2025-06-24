@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
-import { Plus, Filter, Search, TrendingUp, DollarSign, Calendar, Award, Users, Sparkles } from 'lucide-react';
+import React, { useState, ChangeEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Plus, Search } from 'lucide-react';
 import ProjectCard from './ProjectCard';
-import ProjectDetails from './ProjectDetails';
-import BidModal from './BidModal';
 import NetworkSearch from './NetworkSearch';
-import { Project } from '../types';
-import { mockConsultants, mockRegisteredBodies, mockCompanies } from '../data/mockData';
+import { Project, Consultant, RegisteredBody, Company } from '../types';
+import { mockProjects, mockConsultants, mockRegisteredBodies, mockCompanies } from '../data/mockData';
+
+// Add missing type declarations
+// Remove custom ChangeEvent interfaces as they are not needed with proper React imports
 
 interface DashboardProps {
   userType: 'consultant' | 'company' | 'admin';
@@ -15,11 +16,11 @@ interface DashboardProps {
 
 export default function Dashboard({ userType, onPostProject }: DashboardProps) {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [filterStatus, setFilterStatus] = useState<'all' | 'open' | 'in-review' | 'awarded' | 'completed'>('all');
   const [activeTab, setActiveTab] = useState<'projects' | 'network'>('projects');
 
-  const filteredProjects = mockProjects.filter(project => {
+  const filteredProjects = mockProjects.filter((project: Project) => {
     const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          project.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filterStatus === 'all' || project.status === filterStatus;
@@ -33,159 +34,97 @@ export default function Dashboard({ userType, onPostProject }: DashboardProps) {
   const handleBidClick = (project: Project) => {
     navigate(`/project/${project.id}/bid`);
   };
-    console.log('Bid submitted:', bidData);
-    // In a real app, this would send the bid to the backend
+
+  const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
   };
 
-  // Platform statistics
-  const platformStats = [
-    { 
-      label: 'Active Projects', 
-      value: '247', 
-      icon: Calendar, 
-      color: 'text-blue-600' 
-    },
-    { 
-      label: 'Verified Consultants', 
-      value: '1,423', 
-      icon: Users, 
-      color: 'text-green-600' 
-    },
-    { 
-      label: 'Success Rate', 
-      value: '98.4%', 
-      icon: TrendingUp, 
-      color: 'text-purple-600' 
-    }
-  ];
-
-  // Recent activity feed
-  const recentActivity = [
-    { 
-      type: 'project', 
-      title: 'New 510(k) project posted', 
-      details: '$15K budget', 
-      icon: Plus 
-    },
-    { 
-      type: 'consultant', 
-      title: 'CE marking consultant awarded project', 
-      details: 'Class II device', 
-      icon: Award 
-    },
-    { 
-      type: 'success', 
-      title: 'Class II device successfully registered', 
-      details: 'FDA approval', 
-      icon: Sparkles 
-    }
-  ];
-
-  const stats = userType === 'company' 
-    ? [
-        { label: 'Active Projects', value: '3', icon: Calendar, color: 'text-blue-600' },
-        { label: 'Total Bids', value: '47', icon: TrendingUp, color: 'text-green-600' },
-        { label: 'Avg. Bid Price', value: '$18.5K', icon: DollarSign, color: 'text-purple-600' },
-        { label: 'Success Rate', value: '94%', icon: Award, color: 'text-orange-600' }
-      ]
-    : [
-        { label: 'Active Bids', value: '8', icon: Calendar, color: 'text-blue-600' },
-        { label: 'Won Projects', value: '12', icon: Award, color: 'text-green-600' },
-        { label: 'Total Earnings', value: '$156K', icon: DollarSign, color: 'text-purple-600' },
-        { label: 'Success Rate', value: '78%', icon: TrendingUp, color: 'text-orange-600' }
-      ];
-
-  const tabs = [
-    { id: 'projects', label: userType === 'company' ? 'My Projects' : 'Available Projects', icon: Calendar },
-    { id: 'network', label: 'Network Directory', icon: Users }
-  ];
+  const handleFilterStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFilterStatus(e.target.value as 'all' | 'open' | 'in-review' | 'awarded' | 'completed');
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            {userType === 'company' ? 'Company Dashboard' : 'Consultant Dashboard'}
-          </h1>
-          <p className="text-gray-600 mt-1">
-            {userType === 'company' 
-              ? 'Manage your projects, review proposals, and connect with experts' 
-              : 'Find opportunities, manage your bids, and grow your network'
-            }
-          </p>
-        </div>
-        {userType === 'company' && onPostProject && activeTab === 'projects' && (
-          <button
-            onClick={onPostProject}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center mt-4 sm:mt-0"
-          >
-            <Plus className="w-5 h-5 mr-2" />
-            Post New Project
-          </button>
-        )}
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {stats.map((stat, index) => (
-          <div key={index} className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">{stat.label}</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
-              </div>
-              <div className={`w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center`}>
-                <stat.icon className={`w-6 h-6 ${stat.color}`} />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Tabs */}
-      <div className="border-b border-gray-200 mb-6">
-        <nav className="-mb-px flex space-x-8">
-          {tabs.map((tab) => (
+        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <div className="flex gap-4 mt-4 sm:mt-0">
+          {userType === 'company' && onPostProject && (
             <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm flex items-center ${
-                activeTab === tab.id
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+              onClick={onPostProject}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <tab.icon className="w-4 h-4 mr-2" />
-              {tab.label}
+              <Plus className="w-5 h-5 mr-2" />
+              Post Project
             </button>
-          ))}
+          )}
+        </div>
+      </div>
+
+      <div className="border-b border-gray-200">
+        <nav className="-mb-px flex space-x-8" aria-label="Tabs">
+          <button
+            onClick={() => setActiveTab('projects')}
+            className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'projects' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            Projects
+          </button>
+          <button
+            onClick={() => setActiveTab('network')}
+            className={`whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm ${
+              activeTab === 'network' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            Network
+          </button>
         </nav>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProjects.map((project) => (
-          <ProjectCard
-            project={project}
-            onViewDetails={() => setSelectedProject(project)}
-            onPlaceBid={() => setBidProject(project)}
-            showBidButton={userType === 'consultant'}
-          />
-        ))}
-      </div>
+      {activeTab === 'projects' && (
+        <div className="mt-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+                placeholder="Search projects..."
+                className="w-full sm:w-96 pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+            <select
+              value={filterStatus}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value)}
+              className="mt-4 sm:mt-0 sm:ml-4 block w-full sm:w-48 pl-3 pr-10 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <option value="all">All Statuses</option>
+              <option value="open">Open</option>
+              <option value="in-review">In Review</option>
+              <option value="awarded">Awarded</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
 
-      {selectedProject && (
-        <ProjectDetails
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProjects.map((project) => (
+              <ProjectCard
+                project={project}
+                onViewDetails={() => handleProjectClick(project)}
+                onPlaceBid={() => handleBidClick(project)}
+                showBidButton={userType === 'consultant'}
+              />
+            ))}
+          </div>
+        </div>
       )}
 
-      {bidProject && (
-        <BidModal
-          project={bidProject}
-          onClose={() => setBidProject(null)}
-          onSubmitBid={handleSubmitBid}
+      {activeTab === 'network' && (
+        <NetworkSearch
+          consultants={mockConsultants}
+          registeredBodies={mockRegisteredBodies}
+          companies={mockCompanies}
         />
       )}
     </div>
