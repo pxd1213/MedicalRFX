@@ -1,6 +1,6 @@
 [build]
   base = "/"
-  command = "npm install && npx vite build"
+  command = "npm install vite@5.0.9 && npx vite build"
   publish = "build"
   node = "16.20.2"
 
